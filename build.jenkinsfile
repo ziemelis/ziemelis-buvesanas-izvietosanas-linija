@@ -1,0 +1,44 @@
+pipeline {
+agent any
+environment {
+AWS_REGION = 'eu-north-1'
+AWS_PROFILE = 'root'
+AWS_ACCESS_KEY_ID = 'AKIATYNMWGGOEXLDQI4F'
+AWS_SECRET_ACCESS_KEY = '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'
+}
+stages {
+stage('Checkout code') {
+steps {
+git branch: 'main',
+url: 'https://github.com/marians700/Hello-World-Js.git'
+}
+}
+stage('Build Next.js app') {
+steps {
+sh 'yarn install'
+sh 'yarn build'
+}
+}
+stage('Create Docker image') {
+steps {
+sh 'docker build -t nextjs-app .'
+}
+}
+stage('Configure AWS Credentials') {
+steps {
+sh 'aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}'
+sh 'aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}'
+sh 'aws configure set default.region ${AWS_REGION}'
+sh 'aws configure set default.output json'
+sh 'aws configure set profile.${AWS_PROFILE}.region ${AWS_REGION}'
+}
+}
+stage('Push Docker image') {
+steps {
+sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/q5g3t9o3'
+sh 'docker tag nextjs-app:latest public.ecr.aws/q5g3t9o3/nextjs-app:latest'
+sh 'docker push public.ecr.aws/q5g3t9o3/nextjs-app:latest'
+}
+}
+}
+}

@@ -1,11 +1,35 @@
-def name = credentials('test')
 pipeline {
-    agent any
-    stages {
-        stage("Hello") {
-            steps {
-                sh 'aws sts get-caller-identity'
-            }
-        }
-    }
+agent any
+environment {
+AWS_REGION = 'eu-north-1'
+AWS_PROFILE = 'root'
+AWS_ACCESS_KEY_ID = 'AKIATYNMWGGOEXLDQI4F'
+AWS_SECRET_ACCESS_KEY = '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'
+}
+stages {
+stage('Checkout code') {
+steps {
+git branch: 'main',
+url: 'https://github.com/marians700/Hello-World_Js-Updated.git'
+}
+}
+stage('Build Next.js app') {
+steps {
+sh 'yarn install'
+sh 'yarn build'
+}
+}
+stage('Create Docker image') {
+steps {
+sh 'docker build -t nextjs-app .'
+}
+}
+stage('Push Docker image') {
+steps {
+sh 'aws ecr-public get-login-password --region eu-north-1 | docker login --username AWS --password-stdin public.ecr.aws/t8l0z2v0'
+sh 'docker tag nextjs-app-new:latest public.ecr.aws/t8l0z2v0/nextjs-app-new:latest'
+sh 'docker push public.ecr.aws/t8l0z2v0/nextjs-app-new:latest'
+}
+}
+}
 }

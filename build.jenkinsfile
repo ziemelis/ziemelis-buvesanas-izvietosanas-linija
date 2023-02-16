@@ -1,1 +1,11 @@
-
+def name = credentials('test')
+pipeline {
+    agent any
+    stages {
+        stage("Hello") {
+            steps {
+                sh 'aws sts get-caller-identity'
+            }
+        }
+    }
+}

@@ -1,0 +1,41 @@
+pipeline{
+    agent any
+environment {
+        ip = "ec2-16-170-233-222.eu-north-1.compute.amazonaws.com"
+        key = credentials('EC2')
+    }
+
+    stages {
+        stage('Stop docker') {
+           steps {
+        script {
+            try {
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker stop nextjs-app-new"'
+            } catch (err) {
+                echo err.getMessage()
+            }
+        }
+        echo currentBuild.result
+    }
+}   
+        stage('Remove docker') {
+             steps {
+        script {
+            try {
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker rm nextjs-app-new"'
+            } catch (err) {
+                echo err.getMessage()
+            }
+        }
+        echo currentBuild.result
+    }
+}
+        stage('Deploy docker') {
+            steps {
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker pull public.ecr.aws/t8l0z2v0/nextjs-app-new:latest"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker run -d --name nextjs-app-new -p 3000:3000 public.ecr.aws/t8l0z2v0/nextjs-app-new:latest"'
+        
+            }
+        }
+    }
+}

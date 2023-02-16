@@ -1,11 +1,5 @@
 pipeline {
 agent any
-environment {
-AWS_REGION = 'eu-north-1'
-AWS_PROFILE = 'root'
-AWS_ACCESS_KEY_ID = 'AKIATYNMWGGOEXLDQI4F'
-AWS_SECRET_ACCESS_KEY = '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'
-}
 stages {
 stage('Checkout code') {
 steps {

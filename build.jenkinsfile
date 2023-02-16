@@ -15,7 +15,7 @@ sh 'yarn build'
 }
 stage('Create Docker image') {
 steps {
-sh 'docker build -t nextjs-app .'
+sh 'docker build -t nextjs-app-new .'
 }
 }
 stage('Push Docker image') {

@@ -1,7 +1,7 @@
 pipeline{
     agent any
 environment {
-        ip = "ec2-16-170-233-222.eu-north-1.compute.amazonaws.com"
+        ip = "ec2-16-170-226-242.eu-north-1.compute.amazonaws.com"
         key = credentials('EC2')
     }
 

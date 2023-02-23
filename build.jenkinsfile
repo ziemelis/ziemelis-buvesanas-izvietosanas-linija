@@ -23,7 +23,7 @@ sh 'docker build -t nextjs-app-new:$BUILD_NUMBER .'
 stage('Push Docker image') {
 steps {
 sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${repo}'
-sh 'docker tag nextjs-app-new:$$BUILD_NUMBER ${repo}/nextjs-app-new:$BUILD_NUMBER'
+sh 'docker tag nextjs-app-new:$BUILD_NUMBER ${repo}/nextjs-app-new:$BUILD_NUMBER'
 sh 'docker push ${repo}/nextjs-app-new:$BUILD_NUMBER'
 }
 }

@@ -13,6 +13,7 @@ url: 'https://github.com/marians700/Hello-World_Js-Updated.git'
 stage('Build Next.js app') {
 steps {
 sh 'yarn install'
+sh 'yarn build'
 }
 }
 stage('Create Docker image') {

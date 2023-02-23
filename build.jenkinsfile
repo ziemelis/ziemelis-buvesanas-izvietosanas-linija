@@ -1,5 +1,9 @@
 pipeline {
 agent any
+environment {
+        repo = credentials('my-ecr-repo')
+        number = $BUILD_NUMBER
+    }
 stages {
 stage('Checkout code') {
 steps {
@@ -15,14 +19,14 @@ sh 'yarn build'
 }
 stage('Create Docker image') {
 steps {
-sh 'docker build -t project0-nextjs .'
+sh 'docker build -t nextjs-app-new:${number} .'
 }
 }
 stage('Push Docker image') {
 steps {
-sh 'aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 905754026533.dkr.ecr.eu-north-1.amazonaws.com'
-sh 'docker tag project0-nextjs:latest 905754026533.dkr.ecr.eu-north-1.amazonaws.com/project0-nextjs:latest'
-sh 'docker push 905754026533.dkr.ecr.eu-north-1.amazonaws.com/project0-nextjs:latest'
+sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${repo}'
+sh 'docker tag nextjs-app-new:${number} public.ecr.aws/t8l0z2v0/nextjs-app-new:${number}'
+sh 'docker push public.ecr.aws/t8l0z2v0/nextjs-app-new:${number}'
 }
 }
 }

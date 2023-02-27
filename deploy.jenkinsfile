@@ -1,8 +1,10 @@
 pipeline{
     agent any
 environment {
-        ip = "ec2-16-170-215-56.eu-north-1.compute.amazonaws.com"
+        ip = "ec2-16-170-242-51.eu-north-1.compute.amazonaws.com"
         key = credentials('EC2')
+        number = "${params.Build}"
+        repo = credentials('my-ecr-repo')
     }
 
     stages {
@@ -32,8 +34,8 @@ environment {
 }
         stage('Deploy docker') {
             steps {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker pull public.ecr.aws/t8l0z2v0/nextjs-app-new:latest"'
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker run -d --name nextjs-app-new -p 3000:3000 public.ecr.aws/t8l0z2v0/nextjs-app-new:latest"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker pull ${repo}/nextjs-app-new:${number}"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker run -d --name nextjs-app-new -p 3000:3000 ${repo}/nextjs-app-new:${number}"'
         
             }
         }

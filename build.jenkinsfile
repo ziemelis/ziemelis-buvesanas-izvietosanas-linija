@@ -40,9 +40,7 @@ stage('Test') {
 }
 stage('Build Next.js app') {
 steps {
-sh 'yarn install'
 sh 'yarn lint'
-sh 'yarn test'
 sh 'yarn build'
 }
 }

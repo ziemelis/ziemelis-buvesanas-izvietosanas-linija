@@ -1,0 +1,4 @@
+build.pipeline
+deploy.pipeline
+node_modules
+.next

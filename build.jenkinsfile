@@ -27,8 +27,8 @@ script{
 try {
 sh 'yarn install'
 sh 'yarn lint'
-sh 'yarn test'
 sh 'yarn build'
+sh 'yarn test'
 } catch (err) {
 echo err.getMessage()
 }

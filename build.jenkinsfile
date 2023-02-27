@@ -20,6 +20,23 @@ steps {
 git branch: 'main',
 url: 'https://github.com/marians700/Hello-World_Js-Updated.git'
 }
+stage('Install yarn') {
+steps {
+sh 'yarn install'
+}
+}
+stage('Test') {
+           steps {
+        script {
+            try {
+                sh 'yarn test'
+            } catch (err) {
+                echo err.getMessage()
+            }
+        }
+        echo currentBuild.result
+    }
+}   
 }
 stage('Build Next.js app') {
 steps {

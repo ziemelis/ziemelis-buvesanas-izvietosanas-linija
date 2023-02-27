@@ -1,43 +1,33 @@
-pipeline{
-    agent any
+pipeline {
+agent any
 environment {
-        ip = "ec2-16-170-242-51.eu-north-1.compute.amazonaws.com"
-        key = credentials('EC2')
-        number = "${params.Build}"
         repo = credentials('my-ecr-repo')
     }
-
-    stages {
-        stage('Stop docker') {
-           steps {
-        script {
-            try {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker stop nextjs-app-new"'
-            } catch (err) {
-                echo err.getMessage()
-            }
-        }
-        echo currentBuild.result
-    }
-}   
-        stage('Remove docker') {
-             steps {
-        script {
-            try {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker rm nextjs-app-new"'
-            } catch (err) {
-                echo err.getMessage()
-            }
-        }
-        echo currentBuild.result
-    }
+stages {
+stage('Checkout code') {
+steps {
+git branch: 'main',
+url: 'https://github.com/marians700/Hello-World_Js-Updated.git'
 }
-        stage('Deploy docker') {
-            steps {
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker pull ${repo}/nextjs-app-new:${number}"'
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker run -d --name nextjs-app-new -p 3000:3000 ${repo}/nextjs-app-new:${number}"'
-        
-            }
-        }
-    }
+}
+stage('Build Next.js app') {
+steps {
+sh 'yarn install'
+sh 'yarn lint'
+sh 'yarn build'
+}
+}
+stage('Create Docker image') {
+steps {
+sh 'docker build -t nextjs-app-new:$BUILD_NUMBER .'
+}
+}
+stage('Push Docker image') {
+steps {
+sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${repo}'
+sh 'docker tag nextjs-app-new:$BUILD_NUMBER ${repo}/nextjs-app-new:$BUILD_NUMBER'
+sh 'docker push ${repo}/nextjs-app-new:$BUILD_NUMBER'
+}
+}
+}
 }

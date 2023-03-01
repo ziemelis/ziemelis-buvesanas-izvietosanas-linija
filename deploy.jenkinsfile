@@ -1,7 +1,7 @@
 pipeline{
     agent any
 environment {
-        ip = "ec2-16-170-242-51.eu-north-1.compute.amazonaws.com"
+        ip = "ec2-16-171-13-165.eu-north-1.compute.amazonaws.com"
         key = credentials('EC2')
         number = "${params.Build}"
         repo = credentials('my-ecr-repo')

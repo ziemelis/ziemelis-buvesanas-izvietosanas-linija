@@ -12,7 +12,7 @@ stage('SCM') {
         stage('SonarQube analysis') {
         def scannerHome = tool 'NextJs';
             steps {
-                withSonarQubeEnv() {
+                withSonarQubeEnv('sonarqube') {
                         sh "${scannerHome}/bin/sonar-scanner"
                 }
             }

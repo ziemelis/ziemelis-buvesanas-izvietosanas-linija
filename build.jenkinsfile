@@ -23,14 +23,28 @@ stage('SCM') {
       url: 'https://github.com/marians700/Hello-World_Js-Updated.git'
     }
   }
-  stage('Build Next.js app') {
+  stage('Install packages') {
     steps {
       sh 'yarn install'
+    }
+  }
+  stage('Run lint test') {
+    steps {
       sh 'yarn lint'
       sh 'yarn build'
     }
   }
-  stage("Quality Gate") {
+  stage('Run jest test') {
+    steps {
+      sh 'yarn test'
+    }
+  }
+  stage('Build Next.js app') {
+    steps {
+      sh 'yarn build'
+    }
+  }
+  stage("Quality Gate from SonarQube") {
  steps{
   timeout(time: 1, unit: 'HOURS') {
             waitForQualityGate abortPipeline: true

@@ -1,34 +1,29 @@
+node {
+  stage('SCM') {
+    git 'git@github.com:marians700/Hello-World_Js-Updated.git'
+  }
+  stage('build & SonarQube Scan') {
+    withSonarQubeEnv('sonarqube') {
+      sh 'mvn clean package sonar:sonar'
+    } // SonarQube taskId is automatically attached to the pipeline context
+  }
+}
+ 
+// No need to occupy a node
+stage("Quality Gate") {
+  timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
+    def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+    if (qg.status != 'OK') {
+      error "Pipeline aborted due to quality gate failure: ${qg.status}"
+    }
+  }
+}
 pipeline {
 agent any
 environment {
         repo = credentials('my-ecr-repo')
-        scannerHome = tool 'NextJs';
-        qg = waitForQualityGate()
     }
 stages {
-stage('SCM') {
-            steps {
-                checkout scm
-            }
-        }
-        stage('SonarQube analysis') {
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                }
-            }
-        }
-        stage('Quality Gate') {
-        steps {
-                script {
-        timeout(time: 1, unit: 'HOURS') {
-        if (qg.status != 'OK') {
-         error "Pipeline aborted due to quality gate failure: ${qg.status}"
-         }
-         }
-         }
-      }
-}
   stage('Checkout code') {
     steps {
       git branch: 'main',

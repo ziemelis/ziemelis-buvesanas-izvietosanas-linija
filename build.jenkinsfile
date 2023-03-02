@@ -3,6 +3,7 @@ agent any
 environment {
         repo = credentials('my-ecr-repo')
         scannerHome = tool 'NextJs';
+        qg = waitForQualityGate()
     }
 stages {
 stage('SCM') {
@@ -18,7 +19,7 @@ stage('SCM') {
             }
         }
         stage('Quality Gate') {
-        def qg = waitForQualityGate()
+        qg = waitForQualityGate()
         timeout(time: 1, unit: 'HOURS') {
         if (qg.status != 'OK') {
          error "Pipeline aborted due to quality gate failure: ${qg.status}"

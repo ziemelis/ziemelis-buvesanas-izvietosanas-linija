@@ -2,6 +2,7 @@ pipeline {
 agent any
 environment {
         repo = credentials('my-ecr-repo')
+        scannerHome = tool 'NextJs';
     }
 stages {
 stage('SCM') {
@@ -10,7 +11,6 @@ stage('SCM') {
             }
         }
         stage('SonarQube analysis') {
-        def scannerHome = tool 'NextJs';
             steps {
                 withSonarQubeEnv('sonarqube') {
                         sh "${scannerHome}/bin/sonar-scanner"

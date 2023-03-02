@@ -8,11 +8,6 @@ node {
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
-  stage("Quality Gate") {
-  timeout(time: 1, unit: 'HOURS') {
-            waitForQualityGate abortPipeline: true
-          }
-}
 }
 pipeline {
 agent any
@@ -20,6 +15,11 @@ environment {
         repo = credentials('my-ecr-repo')
     }
 stages {
+ stage("Quality Gate") {
+  timeout(time: 1, unit: 'HOURS') {
+            waitForQualityGate abortPipeline: true
+          }
+}
   stage('Checkout code') {
     steps {
       git branch: 'main',

@@ -7,7 +7,6 @@ environment {
 stages {
 stage('SCM') {
       steps{
-    git branch: 'main',
     git 'https://github.com/marians700/Hello-World_Js-Updated.git'
     }
   }

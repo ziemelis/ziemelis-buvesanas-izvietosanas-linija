@@ -1,44 +1,39 @@
-node {
-  stage('SCM') {
-    checkout scm
-  }
-  stage('SonarQube Analysis') {
-    def scannerHome = tool 'NextJs';
-    withSonarQubeEnv() {
-      sh "${scannerHome}/bin/sonar-scanner"
-    }
-  }
-}
 pipeline {
 agent any
 environment {
         repo = credentials('my-ecr-repo')
     }
 stages {
-stage('Checkout code') {
-steps {
-git branch: 'main',
-url: 'https://github.com/marians700/Hello-World_Js-Updated.git'
-}
-}
-stage('Build Next.js app') {
-steps {
-sh 'yarn install'
-sh 'yarn lint'
-sh 'yarn build'
-}
-}
-stage('Create Docker image') {
-steps {
-sh 'docker build -t nextjs-app-new:$BUILD_NUMBER .'
-}
-}
-stage('Push Docker image') {
-steps {
-sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${repo}'
-sh 'docker tag nextjs-app-new:$BUILD_NUMBER ${repo}/nextjs-app-new:$BUILD_NUMBER'
-sh 'docker push ${repo}/nextjs-app-new:$BUILD_NUMBER'
-}
-}
+  stage('Checkout code') {
+    steps {
+      git branch: 'main',
+      url: 'https://github.com/marians700/Hello-World_Js-Updated.git'
+    }
+  }
+  stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh "./gradlew sonarqube"
+                }
+            }
+  stage('Build Next.js app') {
+    steps {
+      sh 'yarn install'
+      sh 'yarn lint'
+      sh 'yarn build'
+    }
+  }
+  stage('Create Docker image') {
+    steps {
+      sh 'docker build -t nextjs-app-new:$BUILD_NUMBER .'
+    }
+  }
+  stage('Push Docker image') {
+    steps {
+      sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${repo}'
+      sh 'docker tag nextjs-app-new:$BUILD_NUMBER ${repo}/nextjs-app-new:$BUILD_NUMBER'
+      sh 'docker push ${repo}/nextjs-app-new:$BUILD_NUMBER'
+    }
+  }
 }
 }

@@ -17,13 +17,6 @@ stage('SCM') {
     }
     }
   }
- stage("Quality Gate") {
- steps{
-  timeout(time: 1, unit: 'HOURS') {
-            waitForQualityGate abortPipeline: true
-            }
-          }
-}
   stage('Checkout code') {
     steps {
       git branch: 'main',
@@ -37,6 +30,13 @@ stage('SCM') {
       sh 'yarn build'
     }
   }
+  stage("Quality Gate") {
+ steps{
+  timeout(time: 1, unit: 'HOURS') {
+            waitForQualityGate abortPipeline: true
+            }
+          }
+}
   stage('Create Docker image') {
     steps {
       sh 'docker build -t nextjs-app-new:$BUILD_NUMBER .'

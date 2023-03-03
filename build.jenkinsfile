@@ -63,5 +63,10 @@ stage('SCM') {
       sh 'docker push ${repo}/nextjs-app-new:$BUILD_NUMBER'
     }
   }
+  stage('cleanup workspace'){
+        steps{
+        cleanWs()
+}
+}
 }
 }

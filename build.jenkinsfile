@@ -5,11 +5,6 @@ environment {
         scannerHome = tool 'NextJs'
     }
 stages {
-stage('SCM') {
-      steps{
-    git 'https://github.com/marians700/Hello-World_Js-Updated.git'
-    }
-  }
   stage('SonarQube Analysis') {
     steps {
     withSonarQubeEnv('sonarqube') {

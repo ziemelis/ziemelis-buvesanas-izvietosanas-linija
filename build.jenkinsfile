@@ -45,7 +45,7 @@ stages {
             waitForQualityGate abortPipeline: true
             }
           }
-}
+  }
   stage('Create Docker image') {
     steps {
       sh 'docker build -t nextjs-app-new:$BUILD_NUMBER .'
@@ -61,7 +61,7 @@ stages {
   stage('cleanup workspace'){
         steps{
         cleanWs()
-}
-}
-}
+        }
+      }
+  }
 }

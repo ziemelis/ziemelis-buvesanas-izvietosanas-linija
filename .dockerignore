@@ -1,3 +1,8 @@
 build.pipeline
 deploy.pipeline
 node_modules
+.dockerignore
+Dockerfile
+README.m
+.git
+.next

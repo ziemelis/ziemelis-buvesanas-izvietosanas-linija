@@ -26,7 +26,6 @@ stages {
   stage('Run lint test') {
     steps {
       sh 'yarn lint'
-      sh 'yarn build'
     }
   }
   stage('Run jest test') {

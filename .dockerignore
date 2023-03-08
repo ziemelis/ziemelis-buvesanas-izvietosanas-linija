@@ -1,7 +1,6 @@
-build.pipeline
-deploy.pipeline
+*.jenkinsfile
 node_modules
 .dockerignore
 Dockerfile
-README.m
+README.md
 .git

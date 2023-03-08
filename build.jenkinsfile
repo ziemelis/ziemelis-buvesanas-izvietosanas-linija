@@ -12,12 +12,6 @@ stages {
     }
     }
   }
-  stage('Pull github repo') {
-    steps {
-      git branch: 'main',
-      url: 'https://github.com/marians700/Hello-World_Js-Updated.git'
-    }
-  }
   stage('Install packages') {
     steps {
       sh 'yarn install'

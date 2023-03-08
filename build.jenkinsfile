@@ -12,6 +12,11 @@ stages {
     }
     }
   }
+  stage('Install dependencies') {
+    steps {
+      sh 'yarn install'
+    }
+  }
   stage('Run lint test') {
     steps {
       sh 'yarn lint'

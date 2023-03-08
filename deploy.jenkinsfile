@@ -19,7 +19,7 @@ environment {
         stage('Deploy docker') {
             steps {
                 sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker pull ${repo}/nextjs-app-new:${number}"'
-                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker run -d --name nextjs-app-new -p 3000:3000 ${repo}/nextjs-app-new:${number}"'
+                sh 'ssh -T -o StrictHostKeyChecking=no -i "${key}" admin@${ip} "docker run -d --name nextjs-app-new -p 3000:3000 ${repo}/nextjs-app-new:"${number}""'
         
             }
         }

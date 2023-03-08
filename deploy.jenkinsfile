@@ -9,10 +9,25 @@ environment {
     }
 
     stages {
-        stage('Create an ec2 instance') {
+    stage('Innit Terraform') {
             steps {
                 sh 'terraform init'
+            }
+        }
+        stage('Terraform destroy') {
+           steps {
+        script {
+            try {
                 sh 'terraform destroy -auto-approve'
+            } catch (err) {
+                echo err.getMessage()
+            }
+        }
+        echo currentBuild.result
+    }
+}   
+        stage('Create an ec2 instance') {
+            steps {
                 sh 'terraform apply -auto-approve'
                 sleep(time: 30, unit: "SECONDS")
             }

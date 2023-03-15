@@ -12,18 +12,6 @@ environment {
                 sh 'terraform init'
             }
         }
-stage('Terraform destroy') {
-           steps {
-        script {
-            try {
-               sh 'terraform destroy -auto-approve -var "pem_file=${key}" -var "pull_command=docker pull ${repo}/nextjs-app-new:${bnumber}" -var "deploy_command=docker run -d --name nextjs-app-new -p 3000:3000 ${repo}/nextjs-app-new:${bnumber}"'
-            } catch (err) {
-                echo err.getMessage()
-            }
-        }
-        echo currentBuild.result
-    }
-}   
         stage('Create EC2 Instance and Deploy docker') {
             steps {
                 sh 'terraform apply -auto-approve -var "pem_file=${key}" -var "pull_command=docker pull ${repo}/nextjs-app-new:${bnumber}" -var "deploy_command=docker run -d --name nextjs-app-new -p 3000:3000 ${repo}/nextjs-app-new:${bnumber}"'

@@ -2,7 +2,6 @@ def number = Jenkins.instance.getItem('Build-NextJs').lastSuccessfulBuild.number
 pipeline{
     agent any
 environment {
-        ip = credentials('EC2-IP')
         key = credentials('EC2')
         repo = credentials('my-ecr-repo')
         bnumber = "${number}"

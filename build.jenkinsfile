@@ -51,6 +51,12 @@ stages {
       sh 'docker push ${repo}/nextjs-app-new:$BUILD_NUMBER'
     }
   }
+  stage("deploy") {
+    steps {
+      build wait: false, job: 'Deploy-Nextjs',
+      parameters: [string(name: 'number', value: "${env.BUILD_NUMBER}")]
+    }
+  }
   stage('cleanup workspace'){
         steps{
         cleanWs()

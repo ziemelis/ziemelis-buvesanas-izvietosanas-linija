@@ -2,7 +2,7 @@ provider "aws" {
   region = "eu-north-1"
 }
 resource "aws_instance" "example" {
-  ami           = "ami-047932622d41b1a1b"
+  ami           = "ami-0e4f4c3e225f087ea"
   instance_type = "t3.micro"
   key_name      = "kartupelis"
   vpc_security_group_ids = ["sg-0dae04546b4ffb089"]

@@ -1,1 +1,0 @@
-# ziemelis-buvesanas-izvietosanas-linija

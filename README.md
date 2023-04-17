@@ -4,7 +4,7 @@ Izmantojot Jenkins rīku, izveidoju integrācijas un piegādes (CI/CD) principus
 
 
 ## Programmatūra
-Šī ir [Next.js](https://nextjs.org/) paraugprogrammatūra, lai būtu paraugprogrammatūra, ko testēt un izvietot.
+Šī ir [Next.js](https://nextjs.org/) programmatūra, lai būtu paraugprogrammatūra, ko testēt un izvietot.
 Tajā ietilpst:
 /pages
 /public

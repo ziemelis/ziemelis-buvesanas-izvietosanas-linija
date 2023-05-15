@@ -53,7 +53,7 @@ stages {
   }
   stage("deploy") {
     steps {
-      build wait: false, job: 'Deploy-Nextjs',
+      build wait: false, job: 'Izvietosanas-linija',
       parameters: [string(name: 'number', value: "${env.BUILD_NUMBER}")]
     }
   }

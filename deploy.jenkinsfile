@@ -3,7 +3,7 @@ pipeline{
 environment {
         key = credentials('EC2')
         REPO = credentials('my-ecr-repo')
-        FE_TAG = "bnumber = "${number}""
+        FE_TAG = "${number}"
         FE_PORT = "3000"
         FE_IMAGE = "nextjs-app-new"
         ip_address = "0.0.0.0"

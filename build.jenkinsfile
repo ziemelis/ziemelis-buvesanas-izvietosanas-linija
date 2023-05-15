@@ -57,10 +57,15 @@ stages {
       parameters: [string(name: 'number', value: "${env.BUILD_NUMBER}")]
     }
   }
-  stage('cleanup workspace'){
-        steps{
-        cleanWs()
-        }
-      }
+
+  }
+  post {
+    failure {
+      slackSend (color: '#FF0000', message: "FrontEnd Build pipeline build #$BUILD_NUMBER failed! \n Build: $BUILD_URL")
+    }
+    always {
+      sh 'docker system prune -af'
+      cleanWs()
+    }
   }
 }

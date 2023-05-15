@@ -5,7 +5,7 @@ environment {
         REPO = credentials('my-ecr-repo')
         FE_TAG = "${params.feBuild}"
         FE_PORT = "3000"
-        FE_IMAGE = "fe"
+        FE_IMAGE = "nextjs-app-new"
         ip_address = "0.0.0.0"
     }
     stages {

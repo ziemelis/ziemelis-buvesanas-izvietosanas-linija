@@ -19,7 +19,6 @@ resource "time_sleep" "wait_30_seconds" {
 resource "null_resource" "execute_commands" {
   triggers = {
     pullfe_command = var.pullfe_command,
-    pullbe_command = var.pullbe_command,
   }
 
   depends_on = [

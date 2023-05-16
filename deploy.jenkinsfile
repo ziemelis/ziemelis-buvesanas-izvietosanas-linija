@@ -34,7 +34,7 @@ environment {
             steps {
              sh 'terraform apply -auto-approve -var "pem_file=${key}" -var "pullfe_command=docker pull ${REPO}/${FE_IMAGE}:${FE_TAG}" -var "deploy_command=docker compose up -d " -var "ec2_name=Deploy Nr #$BUILD_NUMBER"'
              script{
-                ip_address = readFile '../ip_file'
+                ip_address = readFile 'ip_file'
                 }
              }
         }

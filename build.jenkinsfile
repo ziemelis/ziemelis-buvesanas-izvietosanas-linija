@@ -1,6 +1,12 @@
 pipeline {
 agent any
-environment {
+  options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        disableConcurrentBuilds()
+        timestamps()
+
+    }
+  environment {
         // Norada vajadzigos mainigos
         repo = credentials('my-ecr-repo')
         scannerHome = tool 'NextJs'

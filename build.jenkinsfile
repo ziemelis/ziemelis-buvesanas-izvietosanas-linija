@@ -1,6 +1,7 @@
 pipeline {
 agent any
 environment {
+        // Norada vajadzigos mainigos
         repo = credentials('my-ecr-repo')
         scannerHome = tool 'NextJs'
     }
@@ -8,51 +9,61 @@ stages {
   stage('SonarQube Analysis') {
     steps {
     withSonarQubeEnv('sonarqube') {
+      // Palaiz SonarQube testu
       sh "${scannerHome}/bin/sonar-scanner"
     }
     }
   }
   stage('Install dependencies') {
     steps {
+      // Instale projektam nepieciesamas bibliotekas
       sh 'yarn install'
     }
   }
   stage('Run lint test') {
     steps {
+      // Palaist lint testu
       sh 'yarn lint'
     }
   }
   stage('Run jest test') {
     steps {
+      // Palaist jest testus
       sh 'yarn test'
     }
   }
   stage('Build Next.js app') {
     steps {
+      // Uzbuvet Next.js aplikaciju
       sh 'yarn build'
     }
   }
   stage("Quality Gate from SonarQube") {
  steps{
   timeout(time: 1, unit: 'HOURS') {
+            // Kvalitates varti
             waitForQualityGate abortPipeline: true
             }
           }
   }
   stage('Create Docker image') {
     steps {
+      // Izveido Docker bildi
       sh 'docker build -t nextjs-app-new:$BUILD_NUMBER .'
     }
   }
   stage('Push Docker image') {
     steps {
+      // Piesledzas pie ecr un pievieno tagu docker bildei
       sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${repo}'
       sh 'docker tag nextjs-app-new:$BUILD_NUMBER ${repo}/nextjs-app-new:$BUILD_NUMBER'
+      // Augsuplejuplade Docker attelu ECR repozitorija
       sh 'docker push ${repo}/nextjs-app-new:$BUILD_NUMBER'
     }
   }
   stage("deploy") {
     steps {
+      // Palaiz izvietosanas liniju ar nepieciesamajiem parametriem
       build wait: false, job: 'Izvietosanas-linija',
       parameters: [string(name: 'number', value: "${env.BUILD_NUMBER}")]
     }
@@ -61,9 +72,11 @@ stages {
   }
   post {
     failure {
+      // Nosuta Slack zinojumu par neveiksmīgu buvesanu
       slackSend (color: '#FF0000', message: "FrontEnd Build pipeline build #$BUILD_NUMBER failed! \n Build: $BUILD_URL")
     }
     always {
+      // Notira darba vietu
       sh 'docker system prune -af'
       cleanWs()
     }

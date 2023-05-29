@@ -9,7 +9,7 @@ pipeline{
   environment {
         // Norada vajadzigos mainigos
         key = credentials('EC2')
-        REPO = credentials('my-ecr-repo')
+        REPO = "public.ecr.aws/m3t0e0s9"
         FE_TAG = "${number}"
         FE_PORT = "3000"
         FE_IMAGE = "nextjs-app-new"

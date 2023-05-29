@@ -8,7 +8,7 @@ agent any
     }
   environment {
         // Norada vajadzigos mainigos
-        repo = credentials('my-ecr-repo')
+        repo = "public.ecr.aws/m3t0e0s9"
         scannerHome = tool 'NextJs'
     }
 stages {

@@ -11,7 +11,6 @@ pipeline{
         FE_TAG = "${params.feBuild}"
         key = credentials('EC2')
         REPO = "public.ecr.aws/m3t0e0s9"
-        FE_TAG = "${number}"
         FE_PORT = "3000"
         FE_IMAGE = "nextjs-app-new"
         ip_address = "0.0.0.0"
